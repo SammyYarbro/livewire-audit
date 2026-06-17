@@ -1,0 +1,6 @@
+{
+  "name": "livewire-audit-functions",
+  "version": "1.0.0",
+  "description": "LiveWire audit serverless function",
+  "main": "audit.js"
+}

@@ -1,3 +1,565 @@
-[build]
-  publish = "."
-  functions = "netlify/functions"
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Free Schema Markup Generator | LiveWire Intelligence Solutions</title>
+<meta name="description" content="Generate JSON-LD structured data markup for your business in 60 seconds. Free tool by LiveWire Intelligence Solutions — Billings, MT." />
+<style>
+  :root{
+    --red:#c8102e;--ink:#15171a;--muted:#5b616b;--line:#e6e7ea;
+    --bg:#ffffff;--soft:#f6f7f9;--ok:#1d7a4d;--warn:#b8860b;--bad:#c0392b;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.6}
+  .wrap{max-width:980px;margin:0 auto;padding:0 20px}
+  header{border-bottom:1px solid var(--line);padding:18px 0}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:18px;text-decoration:none;color:var(--ink)}
+  .dot{width:12px;height:12px;background:var(--red);border-radius:50%;box-shadow:0 0 0 4px rgba(200,16,46,.15);flex-shrink:0}
+  .brand small{display:block;font-weight:500;font-size:11px;color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+  nav{display:flex;gap:20px;margin-top:0}
+  nav a{font-size:14px;color:var(--muted);text-decoration:none}
+  nav a:hover{color:var(--ink)}
+  .header-inner{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+
+  .hero{padding:40px 0 20px;text-align:center}
+  .hero h1{font-size:34px;line-height:1.15;letter-spacing:-.02em;margin-bottom:12px}
+  .hero h1 span{color:var(--red)}
+  .hero p{font-size:17px;color:var(--muted);max-width:580px;margin:0 auto}
+
+  .steps{display:flex;justify-content:center;gap:0;margin:24px 0 8px;flex-wrap:wrap}
+  .step{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--muted)}
+  .step .n{width:26px;height:26px;border-radius:50%;background:var(--soft);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
+  .step.active .n{background:var(--red);color:#fff;border-color:var(--red)}
+  .step.active{color:var(--ink)}
+  .step-line{width:40px;height:1px;background:var(--line);margin:0 4px}
+
+  .builder{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin:20px 0 40px}
+  @media(max-width:780px){.builder{grid-template-columns:1fr}}
+
+  .panel{background:var(--soft);border:1px solid var(--line);border-radius:16px;padding:24px}
+  .panel h2{font-size:16px;font-weight:600;margin-bottom:18px;display:flex;align-items:center;gap:8px}
+  .panel h2 .tag{font-size:11px;font-weight:600;background:rgba(200,16,46,.1);color:var(--red);padding:2px 8px;border-radius:20px;text-transform:uppercase;letter-spacing:.04em}
+
+  .fg{margin-bottom:14px}
+  .fg label{display:block;font-size:13px;font-weight:500;margin-bottom:5px;color:var(--ink)}
+  .fg input,.fg textarea,.fg select{width:100%;padding:10px 12px;font-size:14px;border:1px solid var(--line);border-radius:9px;background:#fff;font-family:inherit}
+  .fg input:focus,.fg textarea:focus,.fg select:focus{outline:none;border-color:var(--red);box-shadow:0 0 0 3px rgba(200,16,46,.1)}
+  .fg textarea{resize:vertical;min-height:70px}
+  .fg .hint{font-size:12px;color:var(--muted);margin-top:4px}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media(max-width:480px){.row2{grid-template-columns:1fr}}
+
+  .schema-types{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+  .stype{display:flex;align-items:flex-start;gap:9px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 12px;cursor:pointer;transition:border-color .15s}
+  .stype:hover{border-color:var(--red)}
+  .stype input{margin-top:2px;accent-color:var(--red);flex-shrink:0}
+  .stype-body b{font-size:13px;display:block}
+  .stype-body span{font-size:11px;color:var(--muted)}
+  .stype.locked{opacity:.55;cursor:default;position:relative}
+  .lock-badge{font-size:10px;background:var(--ink);color:#fff;padding:1px 6px;border-radius:4px;margin-left:6px;vertical-align:middle}
+
+  .code-panel{background:var(--ink);border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
+  .code-header{padding:14px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.08)}
+  .code-header span{font-size:13px;color:rgba(255,255,255,.5)}
+  .code-actions{display:flex;gap:8px}
+  .cbtn{background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.12);padding:6px 14px;font-size:13px;font-weight:500;border-radius:7px;cursor:pointer}
+  .cbtn:hover{background:rgba(255,255,255,.15)}
+  .cbtn.success{background:rgba(29,122,77,.4);border-color:rgba(29,122,77,.6)}
+  pre{padding:18px;font-family:"Fira Code","Cascadia Code","Courier New",monospace;font-size:12px;line-height:1.65;color:#e8eaf0;overflow:auto;flex:1;max-height:480px;white-space:pre-wrap;word-break:break-all}
+
+  /* score bar */
+  .score-bar{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 18px;margin-bottom:16px;display:flex;align-items:center;gap:16px}
+  .score-num{font-size:28px;font-weight:700;flex-shrink:0;min-width:50px}
+  .score-track{flex:1;height:7px;background:var(--line);border-radius:4px;overflow:hidden}
+  .score-fill{height:100%;border-radius:4px;transition:width .4s ease,background .4s}
+  .score-label{font-size:13px;color:var(--muted)}
+
+  /* upsell wall */
+  .upsell{background:linear-gradient(135deg,#15171a 0%,#2b0a12 100%);color:#fff;border-radius:18px;padding:32px;margin:0 0 40px;text-align:center}
+  .upsell h2{font-size:26px;margin-bottom:10px}
+  .upsell .sub{color:rgba(255,255,255,.6);font-size:16px;margin-bottom:28px;max-width:560px;margin-left:auto;margin-right:auto}
+  .offer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:24px}
+  .offer{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:20px;text-align:left}
+  .offer.hot{border-color:var(--red);background:rgba(200,16,46,.12)}
+  .offer .pill{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;background:var(--red);color:#fff;padding:2px 8px;border-radius:20px;display:inline-block;margin-bottom:10px}
+  .offer .price{font-size:26px;font-weight:700;margin-bottom:4px}
+  .offer .price small{font-size:14px;font-weight:400;color:rgba(255,255,255,.5)}
+  .offer p{font-size:13px;color:rgba(255,255,255,.6);margin-bottom:12px}
+  .offer ul{list-style:none;font-size:13px;color:rgba(255,255,255,.8)}
+  .offer li{padding:3px 0 3px 18px;position:relative}
+  .offer li:before{content:"✓";position:absolute;left:0;color:#7fd6a3}
+  .cta-form{display:grid;grid-template-columns:1fr 1fr auto;gap:10px;max-width:560px;margin:0 auto}
+  @media(max-width:600px){.cta-form{grid-template-columns:1fr}}
+  .cta-form input{padding:13px 15px;font-size:15px;border:none;border-radius:9px;background:rgba(255,255,255,.1);color:#fff}
+  .cta-form input::placeholder{color:rgba(255,255,255,.4)}
+  .cta-form input:focus{outline:none;background:rgba(255,255,255,.18)}
+  .btn-red{background:var(--red);color:#fff;border:none;padding:13px 22px;font-size:15px;font-weight:600;border-radius:9px;cursor:pointer;white-space:nowrap}
+  .btn-red:hover{background:#a60d26}
+  .sent-msg{display:none;margin-top:14px;color:#7fd6a3;font-weight:600;font-size:15px}
+
+  .trust{display:flex;justify-content:center;gap:28px;flex-wrap:wrap;padding:16px 0 30px;border-bottom:1px solid var(--line)}
+  .trust-item{font-size:13px;color:var(--muted);display:flex;align-items:center;gap:6px}
+  .trust-item span{font-size:16px}
+
+  footer{padding:28px 0;text-align:center;color:var(--muted);font-size:13px}
+  .hidden{display:none!important}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="header-inner">
+      <a class="brand" href="/">
+        <span class="dot"></span>
+        <div>LiveWire Intelligence Solutions
+          <small>AI &amp; search readiness</small>
+        </div>
+      </a>
+      <nav>
+        <a href="/">← Free audit tool</a>
+        <a href="mailto:hello@yourdomain.com">Contact</a>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="hero">
+    <h1>Generate your <span>schema markup</span> in 60 seconds</h1>
+    <p>Structured data tells Google and AI systems exactly what your business is. Fill in your info — we'll write the code.</p>
+  </div>
+
+  <div class="steps">
+    <div class="step active"><div class="n">1</div> Fill in your info</div>
+    <div class="step-line"></div>
+    <div class="step active"><div class="n">2</div> Pick schema types</div>
+    <div class="step-line"></div>
+    <div class="step active"><div class="n">3</div> Copy or download</div>
+    <div class="step-line"></div>
+    <div class="step"><div class="n">4</div> Paste into your site</div>
+  </div>
+
+  <div class="builder">
+    <!-- LEFT: form -->
+    <div>
+      <div class="panel">
+        <h2>Business info <span class="tag">Step 1</span></h2>
+
+        <div class="fg">
+          <label>Business name *</label>
+          <input id="f-name" placeholder="Joe's Plumbing" oninput="gen()" />
+        </div>
+        <div class="fg">
+          <label>Website URL *</label>
+          <input id="f-url" placeholder="https://joesplumbing.com" oninput="gen()" />
+        </div>
+        <div class="fg">
+          <label>One-line description</label>
+          <textarea id="f-desc" placeholder="Family-owned plumbing company serving Billings, MT since 1998." oninput="gen()"></textarea>
+        </div>
+        <div class="row2">
+          <div class="fg">
+            <label>Business type</label>
+            <select id="f-type" onchange="gen()">
+              <option value="LocalBusiness">Local Business</option>
+              <option value="Plumber">Plumber</option>
+              <option value="LegalService">Law Firm</option>
+              <option value="MedicalBusiness">Medical Practice</option>
+              <option value="DentalClinic">Dental Clinic</option>
+              <option value="AutoRepair">Auto Repair</option>
+              <option value="TattooParlor">Tattoo Parlor</option>
+              <option value="RealEstateAgent">Real Estate Agent</option>
+              <option value="Restaurant">Restaurant</option>
+              <option value="HVACBusiness">HVAC</option>
+              <option value="Electrician">Electrician</option>
+              <option value="Contractor">Contractor</option>
+              <option value="Corporation">Corporation</option>
+              <option value="ProfessionalService">Professional Services</option>
+            </select>
+          </div>
+          <div class="fg">
+            <label>Phone</label>
+            <input id="f-phone" placeholder="+1 (406) 555-1234" oninput="gen()" />
+          </div>
+        </div>
+        <div class="fg">
+          <label>Street address</label>
+          <input id="f-street" placeholder="123 Main St" oninput="gen()" />
+        </div>
+        <div class="row2">
+          <div class="fg">
+            <label>City</label>
+            <input id="f-city" placeholder="Billings" oninput="gen()" />
+          </div>
+          <div class="fg">
+            <label>State / Zip</label>
+            <input id="f-state" placeholder="MT 59101" oninput="gen()" />
+          </div>
+        </div>
+        <div class="row2">
+          <div class="fg">
+            <label>Email (public)</label>
+            <input id="f-email" placeholder="info@business.com" oninput="gen()" />
+          </div>
+          <div class="fg">
+            <label>Price range</label>
+            <select id="f-price" onchange="gen()">
+              <option value="">— optional —</option>
+              <option value="$">$ Budget</option>
+              <option value="$$">$$ Mid-range</option>
+              <option value="$$$">$$$ Premium</option>
+              <option value="$$$$">$$$$ Luxury</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel" style="margin-top:16px">
+        <h2>Schema types <span class="tag">Step 2</span></h2>
+        <div class="schema-types">
+          <label class="stype">
+            <input type="checkbox" id="s-org" checked onchange="gen()" />
+            <div class="stype-body"><b>Organization</b><span>Core identity markup</span></div>
+          </label>
+          <label class="stype">
+            <input type="checkbox" id="s-local" checked onchange="gen()" />
+            <div class="stype-body"><b>Local Business</b><span>Maps + local search</span></div>
+          </label>
+          <label class="stype">
+            <input type="checkbox" id="s-faq" onchange="gen()" />
+            <div class="stype-body"><b>FAQ Page</b><span>Rich result snippets</span></div>
+          </label>
+          <label class="stype">
+            <input type="checkbox" id="s-service" onchange="gen()" />
+            <div class="stype-body"><b>Service</b><span>Service page markup</span></div>
+          </label>
+          <label class="stype">
+            <input type="checkbox" id="s-bread" onchange="gen()" />
+            <div class="stype-body"><b>Breadcrumb</b><span>Navigation trail</span></div>
+          </label>
+          <label class="stype">
+            <input type="checkbox" id="s-review" onchange="gen()" />
+            <div class="stype-body"><b>Review / Rating</b><span>Star ratings in search</span></div>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: code output -->
+    <div style="display:flex;flex-direction:column;gap:16px">
+      <div class="score-bar">
+        <div class="score-num" id="score-num" style="color:var(--bad)">0</div>
+        <div style="flex:1">
+          <div class="score-track"><div class="score-fill" id="score-fill" style="width:0%;background:var(--bad)"></div></div>
+          <div class="score-label" id="score-label" style="margin-top:5px">Fill in your business name and URL to start</div>
+        </div>
+      </div>
+
+      <div class="code-panel">
+        <div class="code-header">
+          <span id="block-count">0 schema blocks</span>
+          <div class="code-actions">
+            <button class="cbtn" id="copy-btn" onclick="copyCode()">Copy</button>
+            <button class="cbtn" onclick="downloadCode()">Download</button>
+          </div>
+        </div>
+        <pre id="code-out"><!-- fill in your details on the left to generate code --></pre>
+      </div>
+
+      <div style="background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:16px">
+        <b style="font-size:14px;display:block;margin-bottom:8px">📋 How to install</b>
+        <ol style="font-size:13px;color:var(--muted);margin-left:18px;line-height:1.8">
+          <li>Copy the generated code above</li>
+          <li>Open your website editor (WordPress, Squarespace, Wix, etc.)</li>
+          <li>Find the <code style="background:var(--line);padding:1px 5px;border-radius:4px">&lt;head&gt;</code> section of your site</li>
+          <li>Paste the code before the closing <code style="background:var(--line);padding:1px 5px;border-radius:4px">&lt;/head&gt;</code> tag</li>
+          <li>Save and test at <a href="https://search.google.com/test/rich-results" target="_blank" style="color:var(--red)">Google Rich Results Test</a></li>
+        </ol>
+        <p style="font-size:12px;color:var(--muted);margin-top:10px">Not sure how? We'll install it for you — see offer below.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- UPSELL WALL -->
+<div class="wrap">
+  <div class="upsell">
+    <h2>You've got the code. Now what?</h2>
+    <p class="sub">Most business owners generate the code and get stuck at installation. That's where we come in — we handle everything so you can focus on your business.</p>
+
+    <div class="offer-grid">
+      <div class="offer">
+        <div class="price">$497</div>
+        <b>Audit + Code Pack</b>
+        <p>Full technical report + custom schema code for your site</p>
+        <ul>
+          <li>12-point AI readiness audit</li>
+          <li>Custom schema for your business</li>
+          <li>Install guide + testing checklist</li>
+          <li>Delivered within 24 hours</li>
+        </ul>
+      </div>
+      <div class="offer hot">
+        <span class="pill">Most popular</span>
+        <div class="price">$997</div>
+        <b>Done-For-You Install</b>
+        <p>We install, test, and verify everything on your live site</p>
+        <ul>
+          <li>Everything in Code Pack</li>
+          <li>We log into your site and install it</li>
+          <li>Google Rich Results verified</li>
+          <li>30-day fix guarantee</li>
+        </ul>
+      </div>
+      <div class="offer">
+        <div class="price">$297<small>/mo</small></div>
+        <b>Ongoing Optimization</b>
+        <p>Schema stays current as your business grows</p>
+        <ul>
+          <li>Monthly schema updates</li>
+          <li>Re-audit every 30 days</li>
+          <li>AI visibility tracking</li>
+          <li>Priority email support</li>
+        </ul>
+      </div>
+    </div>
+
+    <p style="color:rgba(255,255,255,.5);font-size:14px;margin-bottom:14px">Drop your info — we'll follow up within one business day. No pressure, no spam.</p>
+    <div class="cta-form">
+      <input type="text" id="u-name" placeholder="Your name" />
+      <input type="email" id="u-email" placeholder="Email address" />
+      <button class="btn-red" onclick="submitUpsell()">Get a quote →</button>
+    </div>
+    <div class="sent-msg" id="sent-msg">✓ Got it — we'll be in touch within one business day.</div>
+  </div>
+
+  <div class="trust">
+    <div class="trust-item"><span>🔒</span> No account required</div>
+    <div class="trust-item"><span>📍</span> Based in Billings, MT</div>
+    <div class="trust-item"><span>⚡</span> Delivered within 24 hrs</div>
+    <div class="trust-item"><span>✅</span> Google-verified results</div>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    © <span id="yr"></span> LiveWire Intelligence Solutions · Billings, MT ·
+    <a href="mailto:hello@yourdomain.com" style="color:var(--red)">hello@yourdomain.com</a>
+  </div>
+</footer>
+
+<script>
+document.getElementById('yr').textContent = new Date().getFullYear();
+
+function v(id){ return (document.getElementById(id)||{}).value || ''; }
+function checked(id){ return document.getElementById(id).checked; }
+
+function calcScore(){
+  let s = 0;
+  if(v('f-name').trim()) s += 20;
+  if(v('f-url').trim()) s += 20;
+  if(v('f-desc').trim()) s += 10;
+  if(v('f-phone').trim()) s += 10;
+  if(v('f-street').trim()) s += 10;
+  if(v('f-city').trim()) s += 10;
+  if(v('f-email').trim()) s += 10;
+  const typesOn = ['s-org','s-local','s-faq','s-service','s-bread','s-review'].filter(id=>checked(id)).length;
+  s += Math.min(typesOn * 3, 10);
+  return Math.min(s, 100);
+}
+
+function scoreColor(s){ return s>=80?'#1d7a4d':s>=50?'#b8860b':'#c0392b'; }
+function scoreLabel(s){
+  if(!v('f-name')&&!v('f-url')) return 'Fill in your business name and URL to start';
+  if(s>=80) return 'Strong schema package — ready to install';
+  if(s>=50) return 'Good start — add address and phone to improve';
+  return 'Keep filling in details to strengthen your markup';
+}
+
+function buildSchemas(){
+  const name    = v('f-name')    || 'Your Business';
+  const url     = v('f-url')     || 'https://yourbusiness.com';
+  const desc    = v('f-desc');
+  const type    = v('f-type')    || 'LocalBusiness';
+  const phone   = v('f-phone');
+  const street  = v('f-street');
+  const city    = v('f-city');
+  const state   = v('f-state');
+  const email   = v('f-email');
+  const price   = v('f-price');
+  const blocks  = [];
+
+  const addr = (street||city||state) ? Object.assign(
+    { "@type":"PostalAddress","addressCountry":"US" },
+    street && { streetAddress: street },
+    city   && { addressLocality: city },
+    state  && { addressRegion: state.split(' ')[0] },
+    state  && state.split(' ')[1] && { postalCode: state.split(' ')[1] }
+  ) : null;
+
+  if(checked('s-org')){
+    const o = {
+      "@context":"https://schema.org",
+      "@type":"Organization",
+      "name": name,
+      "url": url,
+      "logo": url.replace(/\/$/,'') + "/logo.png"
+    };
+    if(phone) o.telephone = phone;
+    if(email) o.email = email;
+    if(addr)  o.address = addr;
+    if(desc)  o.description = desc;
+    blocks.push(o);
+  }
+
+  if(checked('s-local')){
+    const lb = {
+      "@context":"https://schema.org",
+      "@type": type,
+      "name": name,
+      "url": url
+    };
+    if(phone)  lb.telephone = phone;
+    if(email)  lb.email = email;
+    if(addr)   lb.address = addr;
+    if(desc)   lb.description = desc;
+    if(price)  lb.priceRange = price;
+    lb.openingHoursSpecification = [
+      {"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday"],"opens":"09:00","closes":"17:00"}
+    ];
+    blocks.push(lb);
+  }
+
+  if(checked('s-faq')){
+    blocks.push({
+      "@context":"https://schema.org",
+      "@type":"FAQPage",
+      "mainEntity":[
+        {"@type":"Question","name":"What services does " + name + " offer?","acceptedAnswer":{"@type":"Answer","text": desc || "We offer a range of professional services. Contact us to learn more."}},
+        {"@type":"Question","name":"Where is " + name + " located?","acceptedAnswer":{"@type":"Answer","text": (street ? street + ', ' : '') + (city || 'our city') + (state ? ', ' + state : '')}},
+        {"@type":"Question","name":"How do I contact " + name + "?","acceptedAnswer":{"@type":"Answer","text":"You can reach us" + (phone ? " by phone at " + phone : '') + (email ? " or by email at " + email : '') + "."}}
+      ]
+    });
+  }
+
+  if(checked('s-service')){
+    blocks.push({
+      "@context":"https://schema.org",
+      "@type":"Service",
+      "name":"Services by " + name,
+      "description": desc || "Professional services provided by " + name,
+      "provider":{"@type":"Organization","name":name,"url":url},
+      "areaServed": city ? {"@type":"City","name":city} : {"@type":"State","name":"Montana"}
+    });
+  }
+
+  if(checked('s-bread')){
+    blocks.push({
+      "@context":"https://schema.org",
+      "@type":"BreadcrumbList",
+      "itemListElement":[
+        {"@type":"ListItem","position":1,"name":"Home","item":url},
+        {"@type":"ListItem","position":2,"name":"About","item":url.replace(/\/$/,'') + "/about"},
+        {"@type":"ListItem","position":3,"name":"Contact","item":url.replace(/\/$/,'') + "/contact"}
+      ]
+    });
+  }
+
+  if(checked('s-review')){
+    blocks.push({
+      "@context":"https://schema.org",
+      "@type":"LocalBusiness",
+      "name": name,
+      "url": url,
+      "aggregateRating":{
+        "@type":"AggregateRating",
+        "ratingValue":"5.0",
+        "reviewCount":"1",
+        "bestRating":"5",
+        "worstRating":"1"
+      },
+      "review":[{
+        "@type":"Review",
+        "reviewRating":{"@type":"Rating","ratingValue":"5","bestRating":"5"},
+        "author":{"@type":"Person","name":"Happy Customer"},
+        "reviewBody":"Replace this with a real customer review before publishing."
+      }]
+    });
+  }
+
+  return blocks;
+}
+
+function gen(){
+  const score = calcScore();
+  const c = scoreColor(score);
+  document.getElementById('score-num').textContent = score;
+  document.getElementById('score-num').style.color = c;
+  document.getElementById('score-fill').style.width = score + '%';
+  document.getElementById('score-fill').style.background = c;
+  document.getElementById('score-label').textContent = scoreLabel(score);
+
+  const blocks = buildSchemas();
+  document.getElementById('block-count').textContent = blocks.length + ' schema block' + (blocks.length!==1?'s':'');
+
+  if(blocks.length === 0){
+    document.getElementById('code-out').textContent = '<!-- select at least one schema type to generate code -->';
+    return;
+  }
+
+  const output = blocks.map(b =>
+    '<script type="application/ld+json">\n' + JSON.stringify(b, null, 2) + '\n<\/script>'
+  ).join('\n\n');
+
+  document.getElementById('code-out').textContent = output;
+}
+
+function copyCode(){
+  const code = document.getElementById('code-out').textContent;
+  if(!code || code.startsWith('<!--')) return;
+  navigator.clipboard.writeText(code).then(()=>{
+    const btn = document.getElementById('copy-btn');
+    btn.textContent = '✓ Copied';
+    btn.classList.add('success');
+    setTimeout(()=>{ btn.textContent='Copy'; btn.classList.remove('success'); }, 2500);
+  });
+}
+
+function downloadCode(){
+  const code = document.getElementById('code-out').textContent;
+  if(!code || code.startsWith('<!--')){ alert('Generate your schema first.'); return; }
+  const name = (v('f-name') || 'schema').toLowerCase().replace(/\s+/g,'-');
+  const blob = new Blob([code], {type:'text/plain'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = name + '-schema.txt';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+function submitUpsell(){
+  const name = document.getElementById('u-name').value.trim();
+  const email = document.getElementById('u-email').value.trim();
+  if(!name||!email||!email.includes('@')){ alert('Please enter your name and a valid email.'); return; }
+  // Replace mzdqwjyg with your Formspree ID (same one as audit page)
+  fetch('https://formspree.io/f/mzdqwjyg',{
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({
+      name, email,
+      source: 'schema-generator',
+      businessName: v('f-name'),
+      businessUrl: v('f-url'),
+      schemasGenerated: ['s-org','s-local','s-faq','s-service','s-bread','s-review'].filter(id=>checked(id)).join(', ')
+    })
+  }).catch(()=>{});
+  document.getElementById('sent-msg').style.display = 'block';
+  document.getElementById('u-name').value = '';
+  document.getElementById('u-email').value = '';
+}
+
+gen();
+</script>
+</body>
+</html>

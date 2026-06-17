@@ -1,246 +1,108 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>AI-Ready Website Audit | LiveWire Intelligence Solutions</title>
-<meta name="description" content="Free instant audit of your website's AI and search readiness. See your structured-data, technical SEO, and visibility score in 30 seconds — by LiveWire Intelligence Solutions." />
-<style>
-  :root{
-    --red:#c8102e; --ink:#15171a; --muted:#5b616b; --line:#e6e7ea;
-    --bg:#ffffff; --soft:#f6f7f9; --ok:#1d7a4d; --warn:#b8860b; --bad:#c0392b;
-  }
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.6}
-  .wrap{max-width:920px;margin:0 auto;padding:0 20px}
-  header{border-bottom:1px solid var(--line);padding:18px 0}
-  .brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:18px}
-  .dot{width:12px;height:12px;background:var(--red);border-radius:50%;box-shadow:0 0 0 4px rgba(200,16,46,.15)}
-  .brand small{display:block;font-weight:500;font-size:11px;color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
-  .hero{padding:54px 0 30px;text-align:center}
-  .hero h1{font-size:38px;line-height:1.15;letter-spacing:-.02em;max-width:720px;margin:0 auto 16px}
-  .hero h1 span{color:var(--red)}
-  .hero p{font-size:18px;color:var(--muted);max-width:600px;margin:0 auto}
-  .tool{background:var(--soft);border:1px solid var(--line);border-radius:16px;padding:28px;margin:32px 0}
-  .audit-row{display:flex;gap:10px;flex-wrap:wrap}
-  .audit-row input{flex:1;min-width:220px;padding:15px 16px;font-size:16px;border:1px solid var(--line);border-radius:10px;background:#fff}
-  .audit-row input:focus{outline:none;border-color:var(--red);box-shadow:0 0 0 3px rgba(200,16,46,.12)}
-  .btn{background:var(--red);color:#fff;border:none;padding:15px 26px;font-size:16px;font-weight:600;border-radius:10px;cursor:pointer;white-space:nowrap}
-  .btn:hover{background:#a60d26}
-  .btn:disabled{opacity:.6;cursor:not-allowed}
-  .btn.ghost{background:#fff;color:var(--ink);border:1px solid var(--line)}
-  .btn.ghost:hover{background:var(--soft)}
-  .hint{font-size:13px;color:var(--muted);margin-top:12px;text-align:center}
-  .hidden{display:none}
-  .score-head{display:flex;align-items:center;gap:24px;flex-wrap:wrap;margin-bottom:24px}
-  .gauge{width:120px;height:120px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-direction:column;flex-shrink:0}
-  .gauge b{font-size:34px;line-height:1}
-  .gauge small{font-size:11px;text-transform:uppercase;letter-spacing:.05em;opacity:.8}
-  .score-summary h2{font-size:22px;margin-bottom:6px}
-  .score-summary p{color:var(--muted);font-size:15px}
-  .checks{display:grid;gap:8px}
-  .check{display:flex;align-items:flex-start;gap:12px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:13px 15px}
-  .badge{width:22px;height:22px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:700;margin-top:1px}
-  .badge.pass{background:var(--ok)} .badge.fail{background:var(--bad)}
-  .check-body b{font-size:15px;display:block}
-  .check-body span{font-size:13px;color:var(--muted)}
-  .cta-box{background:var(--ink);color:#fff;border-radius:14px;padding:26px;margin-top:26px;text-align:center}
-  .cta-box h3{font-size:20px;margin-bottom:8px}
-  .cta-box p{color:#c7cbd1;font-size:15px;margin-bottom:18px}
-  .lead-form{display:grid;gap:10px;max-width:420px;margin:0 auto;text-align:left}
-  .lead-form input{padding:13px 15px;font-size:15px;border:none;border-radius:9px}
-  .lead-form .btn{width:100%}
-  .tiers{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin:30px 0}
-  .tier{border:1px solid var(--line);border-radius:14px;padding:24px}
-  .tier.feature{border:2px solid var(--red)}
-  .tier .price{font-size:30px;font-weight:700;margin:8px 0}
-  .tier ul{list-style:none;font-size:14px;color:var(--muted);margin-top:12px}
-  .tier li{padding:5px 0 5px 22px;position:relative}
-  .tier li:before{content:"✓";color:var(--ok);position:absolute;left:0;font-weight:700}
-  .pill{display:inline-block;background:rgba(200,16,46,.1);color:var(--red);font-size:12px;font-weight:600;padding:3px 10px;border-radius:20px;margin-bottom:8px}
-  section.block{padding:30px 0;border-top:1px solid var(--line)}
-  section.block h2{font-size:26px;letter-spacing:-.01em;margin-bottom:8px}
-  section.block .lede{color:var(--muted);font-size:16px;margin-bottom:18px}
-  footer{border-top:1px solid var(--line);padding:30px 0;text-align:center;color:var(--muted);font-size:13px}
-  .spinner{display:inline-block;width:18px;height:18px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;vertical-align:-3px;margin-right:8px}
-  @keyframes spin{to{transform:rotate(360deg)}}
-  @media(max-width:560px){.hero h1{font-size:30px}}
-</style>
-</head>
-<body>
+# LiveWire Intelligence Solutions — AI Website Audit Tool
 
-<header>
-  <div class="wrap">
-    <div class="brand">
-      <span class="dot"></span>
-      <div>LiveWire Intelligence Solutions
-        <small>AI &amp; search readiness</small>
-      </div>
-    </div>
-  </div>
-</header>
+A live landing page + working audit tool. It fetches a visitor's real website and
+scores it on 12 genuine technical/AI-readiness signals, then captures the lead.
 
-<div class="wrap">
-  <div class="hero">
-    <h1>Is your website <span>invisible</span> to AI search?</h1>
-    <p>Google's AI Overviews, ChatGPT, and Perplexity read your site differently than humans do. Run a free 30-second audit and see exactly what they find.</p>
-  </div>
+Everything here runs on **Netlify's free tier**. No coding required to launch.
 
-  <div class="tool">
-    <div id="input-stage">
-      <div class="audit-row">
-        <input type="url" id="url" placeholder="yourbusiness.com" autocomplete="off" />
-        <button class="btn" id="run">Run free audit</button>
-      </div>
-      <div class="hint">Real scan of your live page — structured data, technical SEO, and crawl signals. No signup to see your score.</div>
-    </div>
+---
 
-    <div id="result-stage" class="hidden">
-      <div class="score-head">
-        <div class="gauge" id="gauge"><b id="score">–</b><small>/ 100</small></div>
-        <div class="score-summary">
-          <h2 id="grade">Scanning…</h2>
-          <p id="summary"></p>
-        </div>
-      </div>
-      <div class="checks" id="checks"></div>
+## What's in this folder
 
-      <div class="cta-box">
-        <h3>Want these fixed — done for you?</h3>
-        <p>Enter your details and we'll send your full report plus ready-to-paste schema code.</p>
-        <div class="lead-form">
-          <input type="text" id="lead-name" placeholder="Your name" />
-          <input type="email" id="lead-email" placeholder="Email" />
-          <input type="text" id="lead-biz" placeholder="Business name" />
-          <button class="btn" id="lead-submit">Send my report</button>
-        </div>
-        <div id="lead-done" class="hidden" style="margin-top:14px;color:#7fd6a3;font-weight:600">✓ Got it — we'll be in touch within one business day.</div>
-        <button class="btn ghost" id="reset" style="margin-top:14px">Scan another site</button>
-      </div>
-    </div>
-  </div>
+```
+livewire-audit/
+├── index.html                  ← your landing page (branding lives here)
+├── netlify.toml                ← config (don't touch)
+└── netlify/functions/audit.js  ← the engine that does the real scan
+```
 
-  <section class="block">
-    <h2>How it works</h2>
-    <p class="lede">A real diagnostic, not a sales gimmick. Every score reflects something actually found on your page.</p>
-    <div class="checks">
-      <div class="check"><div class="badge pass">1</div><div class="check-body"><b>We fetch your live page</b><span>The same way an AI crawler does — and read the raw HTML.</span></div></div>
-      <div class="check"><div class="badge pass">2</div><div class="check-body"><b>We check 12 real signals</b><span>Structured data, titles, headings, mobile, sitemaps, and more.</span></div></div>
-      <div class="check"><div class="badge pass">3</div><div class="check-body"><b>You get a clear score + fixes</b><span>Then we can implement them for you, or hand you the code.</span></div></div>
-    </div>
-  </section>
+---
 
-  <section class="block">
-    <h2>Pricing</h2>
-    <p class="lede">Straightforward. No retainers required to start.</p>
-    <div class="tiers">
-      <div class="tier">
-        <div class="price">$497</div>
-        <b>Audit + code pack</b>
-        <ul><li>Full technical &amp; AI-readiness report</li><li>Custom JSON-LD schema code</li><li>Install guide</li></ul>
-      </div>
-      <div class="tier feature">
-        <span class="pill">Most popular</span>
-        <div class="price">$997</div>
-        <b>Done-for-you implementation</b>
-        <ul><li>Everything in Audit pack</li><li>We install &amp; test on your site</li><li>Google Rich Results verification</li></ul>
-      </div>
-      <div class="tier">
-        <div class="price">$297<small style="font-size:14px">/mo</small></div>
-        <b>Ongoing optimization</b>
-        <ul><li>Monthly re-audit</li><li>Schema updates as you grow</li><li>Quarterly visibility report</li></ul>
-      </div>
-    </div>
-  </section>
-</div>
+## Deploy in ~15 minutes (no command line)
 
-<footer>
-  <div class="wrap">
-    © <span id="year"></span> LiveWire Intelligence Solutions · Billings, MT ·
-    <a href="mailto:hello@yourdomain.com" style="color:var(--red)">hello@yourdomain.com</a>
-  </div>
-</footer>
+### 1. Make a free Netlify account
+Go to https://app.netlify.com/signup — sign up with email or GitHub.
 
-<script>
-  document.getElementById('year').textContent = new Date().getFullYear();
-  const $ = (id) => document.getElementById(id);
+### 2. Drag-and-drop deploy
+1. In Netlify, click **Add new site → Deploy manually**.
+2. Drag this entire `livewire-audit` folder onto the upload area.
+3. Wait ~60 seconds. Netlify gives you a live URL like
+   `https://random-name-12345.netlify.app`.
+4. Open it. Type any website into the audit box and hit **Run free audit** —
+   you'll see a real score. That's your product, live.
 
-  function colorFor(score){
-    if(score>=80) return '#1d7a4d';
-    if(score>=55) return '#b8860b';
-    return '#c0392b';
-  }
-  function gradeFor(score){
-    if(score>=80) return ['Strong AI readiness','Your site is well structured for AI search. A few tweaks will sharpen it further.'];
-    if(score>=55) return ['Decent, with clear gaps','You have the basics, but key signals are missing. Fixing them measurably improves how AI reads your site.'];
-    if(score>=35) return ['Needs work','Several important signals are absent. AI systems are likely misreading or skipping parts of your site.'];
-    return ['Critical gaps','Your site is largely invisible to AI crawlers. These are high-impact, fast fixes.'];
-  }
+> The drag-and-drop method auto-detects the function in `netlify/functions/`.
+> If the audit button spins forever, redeploy and make sure you dragged the
+> whole folder (not just index.html).
 
-  async function runAudit(){
-    const raw = $('url').value.trim();
-    if(!raw){ $('url').focus(); return; }
-    $('run').disabled = true;
-    $('run').innerHTML = '<span class="spinner"></span>Scanning';
-    try{
-      const res = await fetch('/.netlify/functions/audit', {
-        method:'POST', headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({url: raw})
-      });
-      const data = await res.json();
-      if(data.error){ alert(data.error); resetBtn(); return; }
-      showResult(data);
-    }catch(e){
-      alert('Something went wrong scanning that site. Try again.');
-      resetBtn();
-    }
-  }
-  function resetBtn(){ $('run').disabled=false; $('run').textContent='Run free audit'; }
+---
 
-  function showResult(data){
-    $('input-stage').classList.add('hidden');
-    $('result-stage').classList.remove('hidden');
-    const c = colorFor(data.score);
-    const g = $('gauge');
-    g.style.background = c==='#1d7a4d' ? 'rgba(29,122,77,.12)' : c==='#b8860b' ? 'rgba(184,134,11,.12)' : 'rgba(192,57,43,.12)';
-    g.style.color = c;
-    $('score').textContent = data.score;
-    const [grade,summary] = gradeFor(data.score);
-    $('grade').textContent = grade;
-    $('summary').textContent = summary;
-    const box = $('checks'); box.innerHTML='';
-    data.checks.forEach(ch=>{
-      const el=document.createElement('div'); el.className='check';
-      el.innerHTML = `<div class="badge ${ch.pass?'pass':'fail'}">${ch.pass?'✓':'✕'}</div>
-        <div class="check-body"><b>${ch.label}</b><span>${ch.detail}</span></div>`;
-      box.appendChild(el);
-    });
-    window.scrollTo({top:0,behavior:'smooth'});
-    resetBtn();
-  }
+## Connect your domain (recommended — see note below)
 
-  function submitLead(){
-    const name=$('lead-name').value.trim(), email=$('lead-email').value.trim(), biz=$('lead-biz').value.trim();
-    if(!name||!email||!biz||!email.includes('@')){ alert('Please fill in name, a valid email, and business name.'); return; }
-    // Replace this with your real endpoint (Formspree / Zapier / Netlify Forms). See README.
-    fetch('https://formspree.io/f/YOUR_FORM_ID', {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({name,email,business:biz,scannedUrl:$('url').value,score:$('score').textContent})
-    }).catch(()=>{});
-    $('lead-done').classList.remove('hidden');
-  }
+1. Buy a domain (e.g. `livewireintel.com` or `liveiq.io`).
+2. In Netlify: **Domain settings → Add a custom domain** → enter it.
+3. Follow Netlify's DNS instructions (it walks you through it).
+4. Netlify issues a free SSL certificate automatically.
 
-  function reset(){
-    $('result-stage').classList.add('hidden');
-    $('input-stage').classList.remove('hidden');
-    $('url').value=''; $('lead-done').classList.add('hidden');
-    $('lead-name').value=''; $('lead-email').value=''; $('lead-biz').value='';
-  }
+---
 
-  $('run').addEventListener('click', runAudit);
-  $('url').addEventListener('keydown', e=>{ if(e.key==='Enter') runAudit(); });
-  $('lead-submit').addEventListener('click', submitLead);
-  $('reset').addEventListener('click', reset);
-</script>
-</body>
-</html>
+## Make the lead form actually email you (5 min)
+
+Right now the form points at a placeholder. Pick ONE option:
+
+### Easiest: Formspree (free for 50 submissions/mo)
+1. Sign up at https://formspree.io → create a form → copy your form ID
+   (looks like `xyzabcde`).
+2. In `index.html`, find `YOUR_FORM_ID` and replace it with your ID.
+3. Re-upload the folder to Netlify. Done — leads now hit your inbox.
+
+### Alternative: Netlify Forms (built in, no third party)
+Ask me and I'll switch the form over to Netlify's native handler — then
+submissions appear in your Netlify dashboard with email notifications.
+
+### Power option: Zapier → Postiz / CRM
+Point the form at a Zapier webhook to auto-route leads into your existing
+Postiz / email follow-up flow.
+
+---
+
+## Customizing your branding
+
+Open `index.html` and edit:
+- `--red:#c8102e;` near the top → change to your brand color.
+- The email `hello@yourdomain.com` (appears twice).
+- Pricing numbers in the "Pricing" section.
+- Headline copy in the `.hero` block.
+
+---
+
+## What the audit actually checks (so you can defend it to clients)
+
+| Signal | Weight | Why it matters |
+|---|---|---|
+| JSON-LD schema markup | 22 | Real, Google-supported. Biggest AI-readability lever. |
+| HTTPS | 10 | Trust + ranking baseline. |
+| Title tag length | 10 | Core on-page SEO. |
+| Meta description | 10 | Drives click-through + AI snippets. |
+| Single H1 | 8 | Semantic structure. |
+| Mobile viewport | 8 | Mobile-first indexing. |
+| Canonical tag | 6 | Prevents duplicate-content issues. |
+| Open Graph tags | 6 | Social + AI preview accuracy. |
+| Image alt coverage | 6 | Accessibility + image understanding. |
+| XML sitemap | 6 | Crawl coverage. |
+| robots.txt | 4 | Crawl control. |
+| llms.txt | 2 | Emerging, low weight — see honesty note. |
+
+### Honesty note on llms.txt
+As of 2026, no major AI company has committed to reading llms.txt, adoption is
+~10%, and Google has said it's not a ranking signal. We score it at only 2/100
+and frame it to clients as cheap future-proofing — never as a traffic driver.
+Don't oversell it.
+
+---
+
+## Cost summary
+- Netlify hosting: **$0** (free tier covers a small business easily)
+- Domain: ~**$12–20/year**
+- Formspree: **$0** to start
+- **Total to launch: the price of a domain.**
