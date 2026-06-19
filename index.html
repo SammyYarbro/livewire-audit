@@ -13,7 +13,169 @@
     --red:#c8102e; --ink:#15171a; --muted:#5b616b; --line:#e6e7ea;
     --bg:#ffffff; --soft:#f6f7f9; --ok:#1d7a4d; --warn:#b8860b; --bad:#c0392b;
   }
-  *{box-sizing:border-box;margin:0;padding:0}
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "LiveWire Intelligence Solutions",
+  "url": "https://livewireintel.com/",
+  "logo": "https://livewireintel.com/logo.png",
+  "telephone": "4063711393",
+  "email": "hello@livewireintel.com",
+  "address": {
+    "@type": "PostalAddress",
+    "addressCountry": "US",
+    "streetAddress": "317 16th st west",
+    "addressLocality": "Billings",
+    "addressRegion": "Montana"
+  },
+  "description": "LiveWire Intelligence Solutions makes local businesses visible to AI search — so when customers ask ChatGPT, Google, or Perplexity for services, your name is the one that comes up."
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "name": "LiveWire Intelligence Solutions",
+  "url": "https://livewireintel.com/",
+  "telephone": "4063711393",
+  "email": "hello@livewireintel.com",
+  "address": {
+    "@type": "PostalAddress",
+    "addressCountry": "US",
+    "streetAddress": "317 16th st west",
+    "addressLocality": "Billings",
+    "addressRegion": "Montana"
+  },
+  "description": "LiveWire Intelligence Solutions makes local businesses visible to AI search — so when customers ask ChatGPT, Google, or Perplexity for services, your name is the one that comes up.",
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday"
+      ],
+      "opens": "09:00",
+      "closes": "17:00"
+    }
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What services does LiveWire Intelligence Solutions offer?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "LiveWire Intelligence Solutions makes local businesses visible to AI search — so when customers ask ChatGPT, Google, or Perplexity for services, your name is the one that comes up."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Where is LiveWire Intelligence Solutions located?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "317 16th st west, Billings, Montana"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I contact LiveWire Intelligence Solutions?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "You can reach us by phone at 4063711393 or by email at hello@livewireintel.com."
+      }
+    }
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "name": "Services by LiveWire Intelligence Solutions",
+  "description": "LiveWire Intelligence Solutions makes local businesses visible to AI search — so when customers ask ChatGPT, Google, or Perplexity for services, your name is the one that comes up.",
+  "provider": {
+    "@type": "Organization",
+    "name": "LiveWire Intelligence Solutions",
+    "url": "https://livewireintel.com/"
+  },
+  "areaServed": {
+    "@type": "City",
+    "name": "Billings"
+  }
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://livewireintel.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "About",
+      "item": "https://livewireintel.com/about"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Contact",
+      "item": "https://livewireintel.com/contact"
+    }
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "LiveWire Intelligence Solutions",
+  "url": "https://livewireintel.com/",
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "5.0",
+    "reviewCount": "1",
+    "bestRating": "5",
+    "worstRating": "1"
+  },
+  "review": [
+    {
+      "@type": "Review",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": "5",
+        "bestRating": "5"
+      },
+      "author": {
+        "@type": "Person",
+        "name": "Happy Customer"
+      },
+      "reviewBody": "Replace this with a real customer review before publishing."
+    }
+  ]
+}
+
+</script>
+ *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.6}
   .wrap{max-width:920px;margin:0 auto;padding:0 20px}
   header{border-bottom:1px solid var(--line);padding:18px 0}
@@ -289,7 +451,7 @@
     const name=$('lead-name').value.trim(), email=$('lead-email').value.trim(), biz=$('lead-biz').value.trim();
     if(!name||!email||!biz||!email.includes('@')){ alert('Please fill in name, a valid email, and business name.'); return; }
     // Replace this with your real endpoint (Formspree / Zapier / Netlify Forms). See README.
-    fetch('https://formspree.io/f/YOUR_FORM_ID', {
+    fetch('https://formspree.io/f/mzdqwjyg', {
       method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({name,email,business:biz,scannedUrl:$('url').value,score:$('score').textContent})
     }).catch(()=>{});

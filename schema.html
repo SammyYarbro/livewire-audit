@@ -349,7 +349,7 @@
 <footer>
   <div class="wrap">
     © <span id="yr"></span> LiveWire Intelligence Solutions · Billings, MT ·
-    <a href="mailto:hello@yourdomain.com" style="color:var(--red)">hello@yourdomain.com</a>
+    <a href="mailto:hello@livewireintel.com" style="color:var(--red)">hello@livewireintel.com</a>
   </div>
 </footer>
 
@@ -546,8 +546,8 @@ function submitUpsell(){
   const name = document.getElementById('u-name').value.trim();
   const email = document.getElementById('u-email').value.trim();
   if(!name||!email||!email.includes('@')){ alert('Please enter your name and a valid email.'); return; }
-  // Replace YOUR_FORM_ID with your Formspree ID (same one as audit page)
-  fetch('https://formspree.io/f/YOUR_FORM_ID',{
+  // Replace mzdqwjyg with your Formspree ID (same one as audit page)
+  fetch('https://formspree.io/f/mzdqwjyg',{
     method:'POST', headers:{'Content-Type':'application/json'},
     body: JSON.stringify({
       name, email,
